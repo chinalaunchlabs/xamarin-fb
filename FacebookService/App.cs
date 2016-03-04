@@ -2,6 +2,8 @@
 
 using Xamarin.Forms;
 using Wiggin.Facebook;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace FacebookService
 {
@@ -21,12 +23,25 @@ namespace FacebookService
 				Text = "App ID: "
 			};
 
+			var emailLabel = new Label {
+				Text = "Email: "
+			};
+
 			fbLoginButton.Clicked += async (object sender, EventArgs e) => {
 				IAccessToken token = await DependencyService.Get<IFacebookLogin>().LogIn(new string[] {"public_profile", "email"});
 				IProfile profile = DependencyService.Get<IFacebookLogin>().FetchProfile();
 				nameLabel.Text += profile.Name;
 				appLabel.Text += token.ApplicationId;
 				fbLoginButton.IsVisible = false;
+
+				IGraphRequest req = DependencyService.Get<IGraphRequest>().NewRequest(token, "/me");
+				req.SetParams("name, email");
+
+				IGraphResponse response = await req.ExecuteAsync();
+				System.Diagnostics.Debug.WriteLine("Response: " + response.RawResponse);
+				Dictionary<string, string> serialized = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.RawResponse);
+				System.Diagnostics.Debug.WriteLine(serialized["email"]);
+				emailLabel.Text += serialized["email"];
 			};
 
 			MainPage = new ContentPage {
@@ -35,6 +50,7 @@ namespace FacebookService
 					Children = {
 						nameLabel,
 						appLabel,
+						emailLabel,
 						fbLoginButton
 					}
 				}

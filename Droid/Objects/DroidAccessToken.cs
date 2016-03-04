@@ -12,8 +12,8 @@ namespace Wiggin.Facebook.Droid
 		public string Token { get; set; }
 		public string ApplicationId { get; set; }
 		public string UserId { get; set; }
-		public IEnumerable<string> Permissions { get; set; }
-		public IEnumerable<string> DeclinedPermissions { get; set; }
+		public ICollection<string> Permissions { get; set; }
+		public ICollection<string> DeclinedPermissions { get; set; }
 		public AccessTokenSource AccessTokenSource { get; set; }
 		public DateTime ExpirationTime { get; set; }
 		public DateTime LastRefreshTime { get; set; }

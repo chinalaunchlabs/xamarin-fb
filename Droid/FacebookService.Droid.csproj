@@ -86,6 +86,9 @@
     <Compile Include="Helpers\DateTimeHelper.cs" />
     <Compile Include="Services\GraphRequest.cs" />
     <Compile Include="Objects\DroidProfile.cs" />
+    <Compile Include="Helpers\FBSdkHelper.cs" />
+    <Compile Include="Objects\DroidGraphResponse.cs" />
+    <Compile Include="Objects\GraphCallback.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

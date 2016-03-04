@@ -2,44 +2,56 @@
 using Xamarin.Facebook;
 using Wiggin.Facebook.Droid;
 using System.Threading.Tasks;
+using Android.OS;
+using System.Collections.Generic;
 
 [assembly:Xamarin.Forms.Dependency(typeof(GraphRequestService))]
 namespace Wiggin.Facebook.Droid
 {
 	public class GraphRequestService: IGraphRequest
 	{
+		public string Path { get; set; }
+		public string HttpMethod { get; set; }
+		public string Version { get; set; }
+		public IAccessToken AccessToken {
+			get {
+				return new DroidAccessToken (_token);
+			}
+		}
+
 		private AccessToken _token;
-		public AccessToken AccessToken { 
-			get { return _token; }
-			set { _token = value; }
+		private GraphRequest _request;
+
+		public IGraphRequest NewRequest(IAccessToken token, string path, string httpMethod = default(string), string version = default(string)) {
+			_token = (token as DroidAccessToken).ToNative ();
+			Path = path;
+			HttpMethod = httpMethod;
+			Version = version;
+
+			GraphCallback callback = new GraphCallback ();
+			_request = new GraphRequest (_token, Path, null, null, callback);
+
+			return this;
 		}
 
-		private string _graphPath;
-		public string GraphPath { 
-			get { return _graphPath; }
-			set { _graphPath = value; }
+		public void SetParams(string parameters) {
+			var bundle = new Bundle();
+			bundle.PutString("fields", parameters);
+			_request.Parameters = bundle;
 		}
 
-		private GraphRequest _graphRequest;
+		public Task<IGraphResponse> ExecuteAsync() {
+			TaskCompletionSource<IGraphResponse> tcs = new TaskCompletionSource<IGraphResponse> ();
 
-		public void Initialize(IAccessToken token, string path) {
-			AccessToken = AccessToken.CurrentAccessToken;
-			GraphPath = path;
-			_graphRequest = new GraphRequest (AccessToken, path);
+			((GraphCallback)_request.Callback).RequestCompleted += (object sender, GraphResponseEventArgs e) => {
+				DroidGraphResponse resp = new DroidGraphResponse(e.Response);
+				tcs.SetResult(resp);
+			};
 
+			_request.ExecuteAsync ();
+		
+			return tcs.Task;
 		}
-
-//		public async Task<string> NewMeRequest() {
-////			_graphRequest.
-////			var test = new GraphRequestAsyncTask
-//		}
-
-//		private AccessToken ConvertToken(DroidAccessToken token) {
-//			var _access = new AccessToken ();
-//			_access.ApplicationId = token.ApplicationId;
-//			_access.DeclinedPermissions = token.DeclinedPermissions;
-//			_access.Expires = 
-//		}
 	}
 }
 
