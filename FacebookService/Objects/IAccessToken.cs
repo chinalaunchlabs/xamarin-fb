@@ -5,7 +5,8 @@ namespace Wiggin.Facebook
 {
 	public enum AccessTokenSource {
 		FACEBOOK_APPLICATION,
-		WEB_VIEW
+		WEB_VIEW,
+		NONE
 	}
 
 	public interface IAccessToken

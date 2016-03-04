@@ -29,19 +29,21 @@ namespace FacebookService
 
 			fbLoginButton.Clicked += async (object sender, EventArgs e) => {
 				IAccessToken token = await DependencyService.Get<IFacebookLogin>().LogIn(new string[] {"public_profile", "email"});
+				System.Diagnostics.Debug.WriteLine(token.Token);
 				IProfile profile = DependencyService.Get<IFacebookLogin>().FetchProfile();
+				System.Diagnostics.Debug.WriteLine(profile == null);
 				nameLabel.Text += profile.Name;
 				appLabel.Text += token.ApplicationId;
 				fbLoginButton.IsVisible = false;
-
-				IGraphRequest req = DependencyService.Get<IGraphRequest>().NewRequest(token, "/me");
-				req.SetParams("name, email");
-
-				IGraphResponse response = await req.ExecuteAsync();
-				System.Diagnostics.Debug.WriteLine("Response: " + response.RawResponse);
-				Dictionary<string, string> serialized = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.RawResponse);
-				System.Diagnostics.Debug.WriteLine(serialized["email"]);
-				emailLabel.Text += serialized["email"];
+//
+//				IGraphRequest req = DependencyService.Get<IGraphRequest>().NewRequest(token, "/me");
+//				req.SetParams("name, email");
+//
+//				IGraphResponse response = await req.ExecuteAsync();
+//				System.Diagnostics.Debug.WriteLine("Response: " + response.RawResponse);
+//				Dictionary<string, string> serialized = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.RawResponse);
+//				System.Diagnostics.Debug.WriteLine(serialized["email"]);
+//				emailLabel.Text += serialized["email"];
 			};
 
 			MainPage = new ContentPage {
