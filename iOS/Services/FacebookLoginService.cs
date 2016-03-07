@@ -18,11 +18,11 @@ namespace Wiggin.Facebook.iOS
 			loginManager.LoginBehavior = LoginBehavior.SystemAccount;
 			LoginManagerLoginResult result = await loginManager.LogInWithReadPermissionsAsync (permissions, null);
 
-			tcs.SetResult(new iOSAccessToken(AccessToken.CurrentAccessToken));
-
 			if (result.IsCancelled) {
 				tcs.SetCanceled ();
-			} 
+			} else {
+				tcs.SetResult (new iOSAccessToken (AccessToken.CurrentAccessToken));
+			}
 				
 			return await tcs.Task;
 		}
