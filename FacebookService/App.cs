@@ -26,23 +26,31 @@ namespace FacebookService
 			var emailLabel = new Label {
 				Text = "Email: "
 			};
+			var loadingIndicator = new ActivityIndicator ();
+			loadingIndicator.IsEnabled = false;
 
 			fbLoginButton.Clicked += async (object sender, EventArgs e) => {
+				loadingIndicator.IsEnabled = true;
+				loadingIndicator.IsRunning = true;
+				loadingIndicator.IsVisible = true;
 				IAccessToken token = await DependencyService.Get<IFacebookLogin>().LogIn(new string[] {"public_profile", "email"});
 				System.Diagnostics.Debug.WriteLine(token.Token);
-				IProfile profile = DependencyService.Get<IFacebookLogin>().FetchProfile();
-				nameLabel.Text += profile.Name;
-				appLabel.Text += token.ApplicationId;
 				fbLoginButton.IsVisible = false;
-//
+
 				IGraphRequest req = DependencyService.Get<IGraphRequest>().NewRequest(token, "/me", "name, email");
-//				req.SetParams("name, email");
-//
+
 				IGraphResponse response = await req.ExecuteAsync();
 				System.Diagnostics.Debug.WriteLine("Response: " + response.RawResponse);
 				Dictionary<string, string> serialized = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.RawResponse);
-				System.Diagnostics.Debug.WriteLine(serialized["email"]);
+
 				emailLabel.Text += serialized["email"];
+				nameLabel.Text += serialized["name"];
+				appLabel.Text += serialized["id"];
+
+				loadingIndicator.IsEnabled = false;
+				loadingIndicator.IsRunning = false;
+				loadingIndicator.IsVisible = false;
+
 			};
 
 			MainPage = new ContentPage {
@@ -52,7 +60,8 @@ namespace FacebookService
 						nameLabel,
 						appLabel,
 						emailLabel,
-						fbLoginButton
+						fbLoginButton,
+						loadingIndicator,
 					}
 				}
 			};

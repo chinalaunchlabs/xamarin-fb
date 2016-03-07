@@ -51,10 +51,6 @@ namespace Wiggin.Facebook.Droid
 				return null;
 			return _accessToken;
 		}
-
-		public IProfile FetchProfile() {
-			return new DroidProfile (Profile.CurrentProfile);
-		}
 	}
 }
 

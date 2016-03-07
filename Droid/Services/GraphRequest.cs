@@ -22,7 +22,7 @@ namespace Wiggin.Facebook.Droid
 		private AccessToken _token;
 		private GraphRequest _request;
 
-		public IGraphRequest NewRequest(IAccessToken token, string path, string httpMethod = default(string), string version = default(string)) {
+		public IGraphRequest NewRequest(IAccessToken token, string path, string parameters, string httpMethod = default(string), string version = default(string)) {
 			_token = (token as DroidAccessToken).ToNative ();
 			Path = path;
 			HttpMethod = httpMethod;
@@ -31,14 +31,11 @@ namespace Wiggin.Facebook.Droid
 			GraphCallback callback = new GraphCallback ();
 			_request = new GraphRequest (_token, Path, null, null, callback);
 
-			return this;
-		}
-
-		// TODO: Remove this and integrate it in NewRequest bc iOS is stupid.
-		public void SetParams(string parameters) {
 			var bundle = new Bundle();
 			bundle.PutString("fields", parameters);
 			_request.Parameters = bundle;
+
+			return this;
 		}
 
 		public Task<IGraphResponse> ExecuteAsync() {
