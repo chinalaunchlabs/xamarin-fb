@@ -11,6 +11,7 @@ The Facebook SDK implemented as a dependency service for PCL Xamarin projects.
 Please check the Getting Started documentation of the Xamarin Facebook SDK for [iOS](https://components.xamarin.com/gettingstarted/facebookios) and [Android](https://components.xamarin.com/gettingstarted/facebookandroid).
 
 Relevant files are found in:
+```
 FacebookService/
 	Objects/
 	Services/
@@ -23,7 +24,7 @@ FacebookService.iOS/
 	Helpers/
 	Objects/
 	Services/
-
+```
 
 ## Usage
 ### Logging In
