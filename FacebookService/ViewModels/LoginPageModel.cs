@@ -15,8 +15,10 @@ namespace FacebookService
 	{
 		private string[] permissions = new string[] {
 			"public_profile",
-			"email"
+			"email",
+			"user_friends"
 		};
+		private Dictionary<string, string> parameters = new Dictionary<string, string> ();
 
 		private bool _profileNotLoaded = false;
 		public bool ProfileNotLoaded {
@@ -26,7 +28,7 @@ namespace FacebookService
 
 		public ICommand LoginCommand {
 			get {
-				return new Command( async () => {
+				return new Command( async (dsf) => {
 					IAccessToken token;
 					try {
 						token = await DependencyService.Get<IFacebookLogin>()
@@ -35,8 +37,9 @@ namespace FacebookService
 						ProfileNotLoaded = true;
 
 						if (token != null) {
+							parameters.Add("fields", "name, email");
 							IGraphRequest request = DependencyService.Get<IGraphRequest>()
-								.NewRequest(token, "/me", "name, email");
+								.NewRequest(token, "/me", parameters);
 
 							IGraphResponse response = await request.ExecuteAsync();
 							System.Diagnostics.Debug.WriteLine(response.RawResponse);
@@ -45,6 +48,7 @@ namespace FacebookService
 								.DeserializeObject<Dictionary<string,string>>(response.RawResponse);
 							FacebookProfile profile = new FacebookProfile(deserialized["name"], deserialized["email"], deserialized["id"]);
 
+							await CoreMethods.PopToRoot(true);
 							await CoreMethods.PushPageModel<LoggedInPageModel>(profile);
 
 						}
@@ -54,7 +58,7 @@ namespace FacebookService
 
 					}
 					catch (TaskCanceledException e) {
-						System.Diagnostics.Debug.WriteLine("The task was canceledfsdmfdmsf.");
+						System.Diagnostics.Debug.WriteLine("The task was canceled.");
 //						throw e;
 					}
 

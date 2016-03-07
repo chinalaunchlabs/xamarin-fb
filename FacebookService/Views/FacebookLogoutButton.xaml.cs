@@ -4,7 +4,7 @@ using Xamarin.Forms;
 
 namespace FacebookService
 {
-	public partial class FacebookLogoutButton : ContentView
+	public partial class FacebookLogoutButton : Button
 	{
 		public FacebookLogoutButton ()
 		{

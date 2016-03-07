@@ -9,6 +9,6 @@
     BackgroundColor="#3b5998"
     Image="facebook_32.png"
     WidthRequest="230"
-    HeightRequest="50"
+    HeightRequest="40"
     BorderRadius="10" >
 </Button>

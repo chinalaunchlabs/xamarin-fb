@@ -1,13 +1,24 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="FacebookService.LoggedInPage">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:local="clr-namespace:FacebookService;assembly=FacebookService" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="FacebookService.LoggedInPage">
   <ContentPage.Title>Successful</ContentPage.Title>
 
 	<ContentPage.Content>
 
-  <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+  <StackLayout HorizontalOptions="Center">
+    <Image Source="{Binding ProfilePicture}" HeightRequest="100" WidthRequest="100" />
     <Label Text="{Binding WelcomeText}" XAlign="Center" FontSize="Large" />
-    <Label Text="{Binding Email}" XAlign="Center" />
-    <Label Text="{Binding AppId}" XAlign="Center" />
+<!--    <Label Text="{Binding Email}" XAlign="Center" />
+    <Label Text="{Binding AppId}" XAlign="Center" />-->
+<!--    <local:FacebookLogoutButton Command="{Binding LogoutCommand}" /> -->
+    <Button Text="Load Friends" Command="{Binding LoadFriendsCommand}" />
+
+    <ListView IsEnabled="{Binding LoadedFriends}" ItemsSource="{Binding Friends}">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <TextCell Text="{Binding Name}" Detail="{Binding Id}" />
+        </DataTemplate>
+       </ListView.ItemTemplate>
+    </ListView>
   </StackLayout>
 
 	</ContentPage.Content>
