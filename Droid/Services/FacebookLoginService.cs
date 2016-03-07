@@ -9,6 +9,7 @@ using Xamarin.Facebook;
 using System.Collections.Generic;
 using Android.OS;
 using System.Threading;
+using Xamarin.Facebook.Login;
 
 [assembly:Xamarin.Forms.Dependency(typeof(FacebookLoginService))]
 namespace Wiggin.Facebook.Droid
@@ -33,29 +34,9 @@ namespace Wiggin.Facebook.Droid
 
 			return tcs.Task;
 		}
-
-		void FacebookLoginActivity_OnFacebookLoginError ()
-		{
-			_accessToken = new DroidAccessToken(AccessToken.CurrentAccessToken);
-			tcs.SetResult(_accessToken);
-			FacebookLoginActivity.OnFacebookLoginError -= FacebookLoginActivity_OnFacebookLoginError;
-		}
-
-		void FacebookLoginActivity_OnFacebookLoginSuccess ()
-		{
-			_accessToken = new DroidAccessToken(AccessToken.CurrentAccessToken);
-			tcs.SetResult(_accessToken);
-			FacebookLoginActivity.OnFacebookLoginSuccess -= FacebookLoginActivity_OnFacebookLoginSuccess;
-		}
-
-		void FacebookLoginActivity_OnFacebookLoginCancel ()
-		{
-			tcs.SetCanceled();
-			FacebookLoginActivity.OnFacebookLoginCancel -= FacebookLoginActivity_OnFacebookLoginCancel;
-		}
-
+			
 		public bool IsLoggedIn() {
-			return _accessToken != null;
+			return AccessToken.CurrentAccessToken != null;
 		}
 
 		public IAccessToken GetAccessToken() {
@@ -64,11 +45,38 @@ namespace Wiggin.Facebook.Droid
 			return _accessToken;
 		}
 
-		private void LoginSuccessCallback () {
-			_accessToken = new DroidAccessToken(AccessToken.CurrentAccessToken);
-			System.Diagnostics.Debug.WriteLine("Facebook login success");
-			tcs.SetResult(_accessToken);
+		public void Logout() {
+			LoginManager.Instance.LogOut ();
+			_accessToken = null;
 		}
+
+		// Event handlers
+		void FacebookLoginActivity_OnFacebookLoginError ()
+		{
+			_accessToken = new DroidAccessToken(AccessToken.CurrentAccessToken);
+			tcs.SetResult(_accessToken);
+			UnsubscribeFromEvents ();
+		}
+
+		void FacebookLoginActivity_OnFacebookLoginSuccess ()
+		{
+			_accessToken = new DroidAccessToken(AccessToken.CurrentAccessToken);
+			tcs.SetResult(_accessToken);
+			UnsubscribeFromEvents ();
+		}
+
+		void FacebookLoginActivity_OnFacebookLoginCancel ()
+		{
+			tcs.SetCanceled();
+			UnsubscribeFromEvents ();
+		}
+
+		void UnsubscribeFromEvents() {
+			FacebookLoginActivity.OnFacebookLoginCancel -= FacebookLoginActivity_OnFacebookLoginCancel;
+			FacebookLoginActivity.OnFacebookLoginSuccess -= FacebookLoginActivity_OnFacebookLoginSuccess;
+			FacebookLoginActivity.OnFacebookLoginError -= FacebookLoginActivity_OnFacebookLoginError;
+		}
+
 	}
 }
 

@@ -34,6 +34,11 @@ namespace Wiggin.Facebook.iOS
 		public IAccessToken GetAccessToken() {
 			return new iOSAccessToken (AccessToken.CurrentAccessToken);
 		}
+
+		public void Logout() {
+			var loginManager = new LoginManager ();
+			loginManager.LogOut ();
+		}
 	}
 }
 

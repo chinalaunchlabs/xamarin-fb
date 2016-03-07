@@ -9,6 +9,7 @@ namespace Wiggin.Facebook
 		Task<IAccessToken> LogIn(string[] permissions);
 		bool IsLoggedIn ();
 		IAccessToken GetAccessToken();
+		void Logout();
 	}
 }
 

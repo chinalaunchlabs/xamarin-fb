@@ -29,7 +29,7 @@ namespace Wiggin.Facebook.Droid
 		protected override void OnCreate (Bundle savedInstanceState)
 		{
 			base.OnCreate (savedInstanceState);
-		
+
 			callbackManager = CallbackManagerFactory.Create ();
 
 			var loginCallback = new FacebookCallback<LoginResult> {
@@ -38,12 +38,10 @@ namespace Wiggin.Facebook.Droid
 					this.Finish ();
 				},
 				HandleCancel = () => {
-					System.Diagnostics.Debug.WriteLine("Login cancelled");
 					OnFacebookLoginCancel();	// raise event
 					this.Finish();
 				},
 				HandleError = loginError => {
-					System.Diagnostics.Debug.WriteLine("Login error");
 					OnFacebookLoginError();		// raise event
 					this.Finish();
 				}

@@ -3,6 +3,7 @@ using Facebook.CoreKit;
 using Wiggin.Facebook.iOS;
 using System.Threading.Tasks;
 using Foundation;
+using System.Collections.Generic;
 
 [assembly:Xamarin.Forms.Dependency(typeof(iOSGraphRequest))]
 namespace Wiggin.Facebook.iOS
@@ -22,47 +23,52 @@ namespace Wiggin.Facebook.iOS
 		private GraphRequest _request;
 		private GraphRequestConnection _connection;
 
-		public IGraphRequest NewRequest(IAccessToken token, string path, string parameters, string httpMethod = default(string), string version = default(string)) {
-			_token = (token as iOSAccessToken).ToNative ();
-			Path = path;
-			HttpMethod = httpMethod;
-			Version = version;
+		public IGraphRequest NewRequest(IAccessToken token, string path, Dictionary<string,string> parameters, string httpMethod = default(string), string version = default(string)) {
 
-			// Assume parameters are for the "field" key
-			// TODO: See if there are other key values for the FB SDK.
-			Foundation.NSDictionary dict = new Foundation.NSDictionary("fields", parameters);
-
-			_request = new GraphRequest (Path, dict, _token.TokenString, HttpMethod, Version);
+			if (parameters != null) {
+				var dict = new NSMutableDictionary<NSString, NSString> ();
+				foreach (var key in parameters.Keys) {
+					dict.Add (new NSString(key), new NSString(parameters [key]));
+				}
+				Initialize (token, path, dict, httpMethod, version);
+			} else {
+				Initialize (token, path, null, httpMethod, version);
+			}
 
 			return this;
+
 		}
+
+//		public IGraphRequest NewRequest(IAccessToken token, string path, string parameters, string httpMethod = default(string), string version = default(string)) {
+////			_token = (token as iOSAccessToken).ToNative ();
+////			Path = path;
+////			HttpMethod = httpMethod;
+////			Version = version;
+//
+//			// Assume parameters are for the "field" key
+//			// TODO: Let parameters be a Dictionary<string,string> bc there are more keys.
+//			Foundation.NSDictionary dict = new Foundation.NSDictionary("fields", parameters);
+//
+////			_request = new GraphRequest (Path, dict, _token.TokenString, HttpMethod, Version);
+//
+//			Initialize (token, path, dict, httpMethod, version);
+//
+//			return this;
+//		}
 
 		public Task<IGraphResponse> ExecuteAsync() {
 			TaskCompletionSource<IGraphResponse> tcs = new TaskCompletionSource<IGraphResponse> ();
 
 			var handler = new GraphRequestHandler (( connection, result, error ) => {
-				System.Diagnostics.Debug.WriteLine(result);
-				System.Diagnostics.Debug.WriteLine(result.GetType());
+//				System.Diagnostics.Debug.WriteLine(result);
 				tcs.SetResult(new iOSGraphResponse((NSMutableDictionary)result));
 			});
 			_connection = new GraphRequestConnection ();
 			_connection.AddRequest (_request, handler);
 
-			_connection.LoadingFinished += (object sender, EventArgs e) => {
-				System.Diagnostics.Debug.WriteLine("Loading finished.");
-			};
-
-			_connection.BodyDataSent += (sender, e) => {
-				System.Diagnostics.Debug.WriteLine("Body data sent");
-			};
-
 			_connection.Failed += (sender, e) => {
 				System.Diagnostics.Debug.WriteLine("Request failed");
 				tcs.SetCanceled();
-			};
-
-			_connection.WillBeginLoading += (sender, e) => {
-				System.Diagnostics.Debug.WriteLine("Will begin loading");
 			};
 
 			_connection.Start ();
@@ -70,6 +76,14 @@ namespace Wiggin.Facebook.iOS
 			return tcs.Task;
 		}
 
+		private void Initialize(IAccessToken token, string path, Foundation.NSDictionary parameters, string httpMethod = default(string), string version = default(string)) {
+			_token = (token as iOSAccessToken).ToNative ();
+			Path = path;
+			HttpMethod = httpMethod;
+			Version = version;
+
+			_request = new GraphRequest (Path, parameters == null ? null : parameters, _token.TokenString, HttpMethod, Version);
+		}
 	}
 }
 

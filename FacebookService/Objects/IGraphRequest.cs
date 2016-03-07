@@ -13,7 +13,8 @@ namespace Wiggin.Facebook
 		IAccessToken AccessToken { get; }
 
 		// Methods
-		IGraphRequest NewRequest (IAccessToken token, string path, string parameters, string httpMethod = default(string), string version = default(string));
+//		IGraphRequest NewRequest (IAccessToken token, string path, string parameters, string httpMethod = default(string), string version = default(string));
+		IGraphRequest NewRequest (IAccessToken token, string path, Dictionary<string,string> parameters, string httpMethod = default(string), string version = default(string));
 		Task<IGraphResponse> ExecuteAsync();
 	}
 }
