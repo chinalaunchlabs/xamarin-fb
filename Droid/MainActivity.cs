@@ -23,6 +23,8 @@ namespace FacebookService.Droid
 
 			FacebookSdk.SdkInitialize (this.ApplicationContext);
 
+			ActionBar.SetIcon (null);
+
 			LoadApplication (new App ());
 		}
 	}

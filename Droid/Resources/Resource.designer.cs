@@ -365,37 +365,43 @@ namespace FacebookService.Droid
 			public const int com_facebook_tooltip_blue_xout = 2130837529;
 			
 			// aapt resource value: 0x7f02001a
-			public const int icon = 2130837530;
+			public const int facebook_32 = 2130837530;
 			
 			// aapt resource value: 0x7f02001b
-			public const int messenger_bubble_large_blue = 2130837531;
+			public const int facebook_50 = 2130837531;
 			
 			// aapt resource value: 0x7f02001c
-			public const int messenger_bubble_large_white = 2130837532;
+			public const int icon = 2130837532;
 			
 			// aapt resource value: 0x7f02001d
-			public const int messenger_bubble_small_blue = 2130837533;
+			public const int messenger_bubble_large_blue = 2130837533;
 			
 			// aapt resource value: 0x7f02001e
-			public const int messenger_bubble_small_white = 2130837534;
+			public const int messenger_bubble_large_white = 2130837534;
 			
 			// aapt resource value: 0x7f02001f
-			public const int messenger_button_blue_bg_round = 2130837535;
+			public const int messenger_bubble_small_blue = 2130837535;
 			
 			// aapt resource value: 0x7f020020
-			public const int messenger_button_blue_bg_selector = 2130837536;
+			public const int messenger_bubble_small_white = 2130837536;
 			
 			// aapt resource value: 0x7f020021
-			public const int messenger_button_send_round_shadow = 2130837537;
+			public const int messenger_button_blue_bg_round = 2130837537;
 			
 			// aapt resource value: 0x7f020022
-			public const int messenger_button_white_bg_round = 2130837538;
+			public const int messenger_button_blue_bg_selector = 2130837538;
 			
 			// aapt resource value: 0x7f020023
-			public const int messenger_button_white_bg_selector = 2130837539;
+			public const int messenger_button_send_round_shadow = 2130837539;
 			
 			// aapt resource value: 0x7f020024
-			public const int monoandroidsplash = 2130837540;
+			public const int messenger_button_white_bg_round = 2130837540;
+			
+			// aapt resource value: 0x7f020025
+			public const int messenger_button_white_bg_selector = 2130837541;
+			
+			// aapt resource value: 0x7f020026
+			public const int monoandroidsplash = 2130837542;
 			
 			static Drawable()
 			{
