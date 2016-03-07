@@ -5,9 +5,9 @@
 	<ContentPage.Content>
 
   <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
-    <Label Text="{Binding WelcomeText}" FontSize="Large" />
-    <Label Text="{Binding Email}" />
-    <Label Text="{Binding AppId}" />
+    <Label Text="{Binding WelcomeText}" XAlign="Center" FontSize="Large" />
+    <Label Text="{Binding Email}" XAlign="Center" />
+    <Label Text="{Binding AppId}" XAlign="Center" />
   </StackLayout>
 
 	</ContentPage.Content>

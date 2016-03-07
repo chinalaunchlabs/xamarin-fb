@@ -6,6 +6,7 @@ using Xamarin.Forms;
 using Wiggin.Facebook;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FacebookService
 {
@@ -26,20 +27,39 @@ namespace FacebookService
 		public ICommand LoginCommand {
 			get {
 				return new Command( async () => {
-					_profileNotLoaded = true;
-					IAccessToken token = await DependencyService.Get<IFacebookLogin>()
-						.LogIn(permissions);
-					IGraphRequest request = DependencyService.Get<IGraphRequest>()
-						.NewRequest(token, "/me", "name, email, picture");
-					IGraphResponse response = await request.ExecuteAsync();
+					IAccessToken token;
+					try {
+						token = await DependencyService.Get<IFacebookLogin>()
+							.LogIn(permissions);
 
-					System.Diagnostics.Debug.WriteLine(response.RawResponse);
+						ProfileNotLoaded = true;
 
-					Dictionary<string, string> deserialized = JsonConvert
-						.DeserializeObject<Dictionary<string,string>>(response.RawResponse);
-					FacebookProfile profile = new FacebookProfile(deserialized["name"], deserialized["email"], deserialized["id"]);
+						if (token != null) {
+							IGraphRequest request = DependencyService.Get<IGraphRequest>()
+								.NewRequest(token, "/me", "name, email");
 
-					await CoreMethods.PushPageModel<LoggedInPageModel>(profile);
+							IGraphResponse response = await request.ExecuteAsync();
+							System.Diagnostics.Debug.WriteLine(response.RawResponse);
+
+							Dictionary<string, string> deserialized = JsonConvert
+								.DeserializeObject<Dictionary<string,string>>(response.RawResponse);
+							FacebookProfile profile = new FacebookProfile(deserialized["name"], deserialized["email"], deserialized["id"]);
+
+							await CoreMethods.PushPageModel<LoggedInPageModel>(profile);
+
+						}
+						else {
+							System.Diagnostics.Debug.WriteLine("token was null");
+						}
+
+					}
+					catch (TaskCanceledException e) {
+						System.Diagnostics.Debug.WriteLine("The task was canceledfsdmfdmsf.");
+//						throw e;
+					}
+
+
+					ProfileNotLoaded = false;
 				});
 			}
 		}
