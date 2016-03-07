@@ -34,6 +34,7 @@ namespace Wiggin.Facebook.Droid
 			return this;
 		}
 
+		// TODO: Remove this and integrate it in NewRequest bc iOS is stupid.
 		public void SetParams(string parameters) {
 			var bundle = new Bundle();
 			bundle.PutString("fields", parameters);

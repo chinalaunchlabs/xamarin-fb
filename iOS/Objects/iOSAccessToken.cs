@@ -25,14 +25,17 @@ namespace Wiggin.Facebook.iOS
 			Token = token.TokenString;
 			ApplicationId = token.AppID;
 			UserId = token.UserID;
-//			Permissions = new List<string>(token.Permissions.ToArray<string>());
-//			DeclinedPermissions = new List<string>(token.DeclinedPermissions.ToArray<string>());
+			Permissions = new List<string>();
+			DeclinedPermissions = new List<string>();
 			ExpirationTime = DateTimeHelper.FromNSDate(token.ExpirationDate);
 			LastRefreshTime = DateTimeHelper.FromNSDate (token.RefreshDate);
 			AccessTokenSource = AccessTokenSource.NONE;
 
 			foreach (var p in token.Permissions) {
-				System.Diagnostics.Debug.WriteLine (p.ToString ());
+				Permissions.Add (p.ToString ());
+			}
+			foreach (var p in token.DeclinedPermissions) {
+				DeclinedPermissions.Add (p.ToString ());
 			}
 		}
 	}

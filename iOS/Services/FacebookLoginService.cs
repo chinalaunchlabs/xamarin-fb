@@ -26,6 +26,7 @@ namespace Wiggin.Facebook.iOS
 			} 
 
 			// Wait for profile to change before setting the token
+			// TODO: Remove this feature. Expect the user to just make a graph request for profile info.
 			Profile.Notifications.ObserveDidChange ((sender, e) => {
 
 				if (e.NewProfile == null)
