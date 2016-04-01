@@ -5,6 +5,7 @@ using Facebook.CoreKit;
 using Facebook.LoginKit;
 using MonoTouch.Dialog;
 using UIKit;
+using System.Linq;
 
 [assembly:Xamarin.Forms.Dependency(typeof(FacebookLoginService))]
 namespace Wiggin.Facebook.iOS
@@ -12,11 +13,18 @@ namespace Wiggin.Facebook.iOS
 	public class FacebookLoginService: IFacebookLogin
 	{
 		public async Task<IAccessToken> LogIn(string[] permissions) {
+			System.Diagnostics.Debug.WriteLine ("Hello from iOS-Land!");
 			TaskCompletionSource<IAccessToken> tcs = new TaskCompletionSource<IAccessToken> ();
 
 			var loginManager = new LoginManager ();
 			loginManager.LoginBehavior = LoginBehavior.SystemAccount;
-			LoginManagerLoginResult result = await loginManager.LogInWithReadPermissionsAsync (permissions, null);
+			LoginManagerLoginResult result;
+
+//			if (permissions.Contains ("publish_actions")) {
+//				result = await loginManager.LogInWithPublishPermissionsAsync (permissions, null);
+//			} else {
+				result = await loginManager.LogInWithReadPermissionsAsync (permissions, null);
+//			}
 
 			if (result.IsCancelled) {
 				tcs.SetCanceled ();

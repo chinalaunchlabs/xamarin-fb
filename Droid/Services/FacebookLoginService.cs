@@ -20,6 +20,12 @@ namespace Wiggin.Facebook.Droid
 		private TaskCompletionSource<IAccessToken> tcs;
 
 		public Task<IAccessToken> LogIn(string[] permissions) {
+
+			// clear previous token for science
+			if (AccessToken.CurrentAccessToken != null) {
+				LoginManager.Instance.LogOut ();
+			}
+
 			tcs = new TaskCompletionSource<IAccessToken> ();
 
 			FacebookLoginActivity.OnFacebookLoginCancel += FacebookLoginActivity_OnFacebookLoginCancel;
@@ -51,21 +57,20 @@ namespace Wiggin.Facebook.Droid
 		}
 
 		// Event handlers
-		void FacebookLoginActivity_OnFacebookLoginError ()
+		void FacebookLoginActivity_OnFacebookLoginError (AccessToken token)
 		{
 			_accessToken = new DroidAccessToken(AccessToken.CurrentAccessToken);
 			tcs.SetResult(_accessToken);
 			UnsubscribeFromEvents ();
 		}
 
-		void FacebookLoginActivity_OnFacebookLoginSuccess ()
-		{
-			_accessToken = new DroidAccessToken(AccessToken.CurrentAccessToken);
-			tcs.SetResult(_accessToken);
+		void FacebookLoginActivity_OnFacebookLoginSuccess (AccessToken token)
+		{ 
+			tcs.SetResult(new DroidAccessToken(token));
 			UnsubscribeFromEvents ();
 		}
 
-		void FacebookLoginActivity_OnFacebookLoginCancel ()
+		void FacebookLoginActivity_OnFacebookLoginCancel (AccessToken token)
 		{
 			tcs.SetCanceled();
 			UnsubscribeFromEvents ();

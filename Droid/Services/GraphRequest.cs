@@ -73,7 +73,13 @@ namespace Wiggin.Facebook.Droid
 			Version = version;
 
 			GraphCallback callback = new GraphCallback ();
-			_request = new GraphRequest (_token, Path, null, null, callback);
+			Xamarin.Facebook.HttpMethod http = Xamarin.Facebook.HttpMethod.Get;
+
+			if (httpMethod == "POST") {
+				http = Xamarin.Facebook.HttpMethod.Post;
+			}
+
+			_request = new GraphRequest (_token, Path, null, http, callback);
 		}
 
 	}

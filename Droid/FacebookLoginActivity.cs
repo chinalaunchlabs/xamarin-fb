@@ -19,7 +19,7 @@ namespace Wiggin.Facebook.Droid
 	[Activity (Label = "")]			
 	public class FacebookLoginActivity : Activity
 	{
-		public delegate void FacebookDelegate ();
+		public delegate void FacebookDelegate (AccessToken token);
 		public static event FacebookDelegate OnFacebookLoginSuccess;
 		public static event FacebookDelegate OnFacebookLoginError;
 		public static event FacebookDelegate OnFacebookLoginCancel;
@@ -34,15 +34,15 @@ namespace Wiggin.Facebook.Droid
 
 			var loginCallback = new FacebookCallback<LoginResult> {
 				HandleSuccess = loginResult => {
-					OnFacebookLoginSuccess();	/// raise event
+					OnFacebookLoginSuccess(loginResult.AccessToken);	/// raise event
 					this.Finish ();
 				},
 				HandleCancel = () => {
-					OnFacebookLoginCancel();	// raise event
+					OnFacebookLoginCancel(null);	// raise event
 					this.Finish();
 				},
 				HandleError = loginError => {
-					OnFacebookLoginError();		// raise event
+					OnFacebookLoginError(null);		// raise event
 					this.Finish();
 				}
 			};
@@ -50,8 +50,17 @@ namespace Wiggin.Facebook.Droid
 			LoginManager.Instance.RegisterCallback (callbackManager, loginCallback);
 
 			string[] PERMISSIONS = Intent.GetStringArrayExtra ("permissions");
-			LoginManager.Instance.LogInWithReadPermissions (this, PERMISSIONS);
-		
+
+			try {
+				if (PERMISSIONS.Contains<string>("publish_actions")) {
+					LoginManager.Instance.LogInWithPublishPermissions(this, PERMISSIONS);
+				} else {
+					LoginManager.Instance.LogInWithReadPermissions (this, PERMISSIONS);
+				}
+			} catch (Exception e) {
+				System.Diagnostics.Debug.WriteLine ("FacebookService Error: {0}", e.Message);
+			}
+
 		}
 
 		protected override void OnActivityResult (int requestCode, Result resultCode, Intent data)
@@ -77,6 +86,8 @@ namespace Wiggin.Facebook.Droid
 
 		public void OnError (FacebookException error)
 		{
+			System.Diagnostics.Debug.WriteLine ("Error message: " + error.Message);
+
 			var c = HandleError;
 			if (c != null)
 				c (error);
