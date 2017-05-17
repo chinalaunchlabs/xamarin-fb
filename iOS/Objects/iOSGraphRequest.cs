@@ -23,7 +23,7 @@ namespace Wiggin.Facebook.iOS
 		private GraphRequest _request;
 		private GraphRequestConnection _connection;
 
-		public IGraphRequest NewRequest(IAccessToken token, string path, Dictionary<string,string> parameters, string httpMethod = default(string), string version = default(string)) {
+		public IGraphRequest NewRequest(FbAccessToken token, string path, Dictionary<string,string> parameters, string httpMethod = default(string), string version = default(string)) {
 
 			if (parameters != null) {
 				var dict = new NSMutableDictionary<NSString, NSString> ();
@@ -61,7 +61,7 @@ namespace Wiggin.Facebook.iOS
 
 			var handler = new GraphRequestHandler (( connection, result, error ) => {
 //				System.Diagnostics.Debug.WriteLine(result);
-				tcs.SetResult(new iOSGraphResponse((NSMutableDictionary)result));
+				tcs.SetResult(new iOSGraphResponse((NSDictionary)result));
 			});
 			_connection = new GraphRequestConnection ();
 			_connection.AddRequest (_request, handler);
@@ -76,8 +76,8 @@ namespace Wiggin.Facebook.iOS
 			return tcs.Task;
 		}
 
-		private void Initialize(IAccessToken token, string path, Foundation.NSDictionary parameters, string httpMethod = default(string), string version = default(string)) {
-			_token = (token as iOSAccessToken).ToNative ();
+		private void Initialize(FbAccessToken token, string path, Foundation.NSDictionary parameters, string httpMethod = default(string), string version = default(string)) {
+			_token = token.ToNative ();
 			Path = path;
 			HttpMethod = httpMethod;
 			Version = version;

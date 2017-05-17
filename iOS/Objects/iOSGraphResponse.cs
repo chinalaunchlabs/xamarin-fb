@@ -9,7 +9,7 @@ namespace Wiggin.Facebook.iOS
 	{
 		public string RawResponse { get; set; }
 
-		public iOSGraphResponse (NSMutableDictionary graphResponse)
+		public iOSGraphResponse (NSDictionary graphResponse)
 		{
 			NSError error;
 			NSData jsonData = NSJsonSerialization.Serialize (graphResponse, NSJsonWritingOptions.PrettyPrinted, out error);

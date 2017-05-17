@@ -28,7 +28,10 @@ namespace FacebookService
 
 		private async void LoadPic() {
 
-			var token = DependencyService.Get<IFacebookLogin> ().GetAccessToken ();
+			var token = FbAccessToken.Current;
+			if (token == null)
+				return;
+			
 			var parameters = new Dictionary<string, string>();
 			parameters.Add("redirect", "false");
 
@@ -74,7 +77,10 @@ namespace FacebookService
 		public ICommand LoadFriendsCommand {
 			get {
 				return new Command (async (obj) => {
-					var token = DependencyService.Get<IFacebookLogin> ().GetAccessToken ();
+					var token = FbAccessToken.Current;
+					if (token == null)
+						return;
+
 					var request = DependencyService.Get<IGraphRequest> ().NewRequest (token, "/me/friends", null);
 					var response = await request.ExecuteAsync();
 //					System.Diagnostics.Debug.WriteLine(response.RawResponse);

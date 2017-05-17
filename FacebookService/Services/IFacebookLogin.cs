@@ -6,9 +6,9 @@ namespace Wiggin.Facebook
 	public interface IFacebookLogin
 	{
 
-		Task<IAccessToken> LogIn(string[] permissions);
+		Task<FbAccessToken> LogIn(string[] permissions);
 		bool IsLoggedIn ();
-		IAccessToken GetAccessToken();
+		FbAccessToken GetAccessToken();
 		void Logout();
 	}
 }

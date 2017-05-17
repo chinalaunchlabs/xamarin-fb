@@ -16,17 +16,17 @@ namespace Wiggin.Facebook.Droid
 {
 	public class FacebookLoginService: global::Xamarin.Forms.Platform.Android.FormsApplicationActivity, IFacebookLogin
 	{
-		private DroidAccessToken _accessToken = null;
-		private TaskCompletionSource<IAccessToken> tcs;
+		private FbAccessToken _accessToken = null;
+		private TaskCompletionSource<FbAccessToken> tcs;
 
-		public Task<IAccessToken> LogIn(string[] permissions) {
+		public Task<FbAccessToken> LogIn(string[] permissions) {
 
 			// clear previous token for science
 			if (AccessToken.CurrentAccessToken != null) {
 				LoginManager.Instance.LogOut ();
 			}
 
-			tcs = new TaskCompletionSource<IAccessToken> ();
+			tcs = new TaskCompletionSource<FbAccessToken> ();
 
 			FacebookLoginActivity.OnFacebookLoginCancel += FacebookLoginActivity_OnFacebookLoginCancel;
 			FacebookLoginActivity.OnFacebookLoginSuccess += FacebookLoginActivity_OnFacebookLoginSuccess;
@@ -45,7 +45,7 @@ namespace Wiggin.Facebook.Droid
 			return AccessToken.CurrentAccessToken != null;
 		}
 
-		public IAccessToken GetAccessToken() {
+		public FbAccessToken GetAccessToken() {
 			if (!IsLoggedIn ())
 				return null;
 			return _accessToken;
@@ -59,14 +59,14 @@ namespace Wiggin.Facebook.Droid
 		// Event handlers
 		void FacebookLoginActivity_OnFacebookLoginError (AccessToken token)
 		{
-			_accessToken = new DroidAccessToken(AccessToken.CurrentAccessToken);
+			_accessToken = AccessToken.CurrentAccessToken.ToForms();
 			tcs.SetResult(_accessToken);
 			UnsubscribeFromEvents ();
 		}
 
 		void FacebookLoginActivity_OnFacebookLoginSuccess (AccessToken token)
 		{ 
-			tcs.SetResult(new DroidAccessToken(token));
+			tcs.SetResult(token.ToForms());
 			UnsubscribeFromEvents ();
 		}
 

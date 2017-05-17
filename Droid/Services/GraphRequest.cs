@@ -14,17 +14,12 @@ namespace Wiggin.Facebook.Droid
 		public string Path { get; set; }
 		public string HttpMethod { get; set; }
 		public string Version { get; set; }
-		public IAccessToken AccessToken {
-			get {
-				return new DroidAccessToken (_token);
-			}
-		}
 
 		private AccessToken _token;
 		private GraphRequest _request;
 
 
-		public IGraphRequest NewRequest(IAccessToken token, string path, Dictionary<string,string> parameters, string httpMethod = default(string), string version = default(string)) {
+		public IGraphRequest NewRequest(FbAccessToken token, string path, Dictionary<string,string> parameters, string httpMethod = default(string), string version = default(string)) {
 
 			Initialize (token, path, httpMethod, version);
 
@@ -42,7 +37,7 @@ namespace Wiggin.Facebook.Droid
 			return this;
 		}
 
-//		public IGraphRequest NewRequest(IAccessToken token, string path, string parameters, string httpMethod = default(string), string version = default(string)) {
+//		public IGraphRequest NewRequest(FbAccessToken token, string path, string parameters, string httpMethod = default(string), string version = default(string)) {
 //
 //			Initialize (token, path, httpMethod, version);
 //
@@ -66,8 +61,8 @@ namespace Wiggin.Facebook.Droid
 			return tcs.Task;
 		}
 
-		private void Initialize(IAccessToken token, string path, string httpMethod = default(string), string version = default(string)) {
-			_token = (token as DroidAccessToken).ToNative ();
+		private void Initialize(FbAccessToken token, string path, string httpMethod = default(string), string version = default(string)) {
+			_token = token.ToNative ();
 			Path = path;
 			HttpMethod = httpMethod;
 			Version = version;
