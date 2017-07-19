@@ -11,8 +11,8 @@ namespace FacebookService.iOS
 	[Register ("AppDelegate")]
 	public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
 	{
-		string appId = "575239062629136";
-		string appName = "Facebook API";
+		string appId = "325195584604132";
+		string appName = "TestApp";
 
 		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
 		{
@@ -31,15 +31,6 @@ namespace FacebookService.iOS
 			return base.FinishedLaunching (app, options);
 		}
 	
-		// THIS.
-		// THIS STUPID THING.
-		// I SPENT HOURS. 
-		// HOURS.
-		// ALL I NEEDED WAS TO INCLUDE THIS.
-		//
-		// IT'S A CONSPIRACY.
-		//
-		// NEVER FORGET.
 		public override bool OpenUrl (UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)
 		{
 			// We need to handle URLs by passing them to their own OpenUrl in order to make the SSO authentication works.

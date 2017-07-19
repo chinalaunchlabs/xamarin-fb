@@ -3,7 +3,7 @@ The Facebook SDK implemented as a dependency service for PCL Xamarin projects.
 ## Testing
 *If you just want to see the basic functionality and don't want to change the app ids, etc.*
 
-**Test User:** ccizldw_riceberg_1457337743@tfbnw.net
+**Test User:** john_maykkgj_doe@tfbnw.net
 
 **Password:** test1234
 
@@ -30,7 +30,7 @@ FacebookService.iOS/
 ### Logging In
 ```
 var permissions = new string[] { "public_profile", "email" };
-IAccessToken token;
+FbAccessToken token;
 try {
 	token = await DependencyService.Get<IFacebookLogin>().LogIn(permissions);
 	System.Diagnostics.Debug.WriteLine("Login successful!");

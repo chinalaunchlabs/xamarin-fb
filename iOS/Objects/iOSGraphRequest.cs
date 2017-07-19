@@ -13,11 +13,6 @@ namespace Wiggin.Facebook.iOS
 		public string Path { get; set; }
 		public string HttpMethod { get; set; }
 		public string Version { get; set; }
-		public IAccessToken AccessToken {
-			get {
-				return new iOSAccessToken (_token);
-			}
-		}
 
 		private AccessToken _token;
 		private GraphRequest _request;

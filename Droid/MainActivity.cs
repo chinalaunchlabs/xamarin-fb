@@ -12,7 +12,7 @@ using Xamarin.Facebook;
 [assembly: MetaData ("com.facebook.sdk.ApplicationId", Value="@string/facebook_app_id")]
 namespace FacebookService.Droid
 {
-	[Activity (Label = "FacebookService.Droid", Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+	[Activity (Label = "Facebook Graph Explorer", Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
 	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
 	{
 		protected override void OnCreate (Bundle bundle)

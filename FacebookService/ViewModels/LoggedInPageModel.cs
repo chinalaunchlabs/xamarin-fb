@@ -83,7 +83,7 @@ namespace FacebookService
 
 					var request = DependencyService.Get<IGraphRequest> ().NewRequest (token, "/me/friends", null);
 					var response = await request.ExecuteAsync();
-//					System.Diagnostics.Debug.WriteLine(response.RawResponse);
+					System.Diagnostics.Debug.WriteLine(response.RawResponse);
 
 					JObject fbFriends = JObject.Parse(response.RawResponse);
 					IList<JToken> friends = (IList<JToken>)fbFriends["data"];
